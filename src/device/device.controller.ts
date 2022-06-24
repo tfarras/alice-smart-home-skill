@@ -3,12 +3,15 @@ import {
   Controller,
   Get,
   HttpCode,
+  Param,
   Post,
   UseInterceptors,
 } from '@nestjs/common';
+import { CapabilityType } from '../capabilities';
 import { TransformInterceptor } from '../interceptor/transform.interceptor';
 import { DeviceActionService } from './device-action.service';
 import { DeviceService } from './device.service';
+import { AddCapabilityDto } from './dto/capability.dto';
 import { DeviceActionDto } from './dto/device-action';
 
 @Controller('user/devices')
@@ -54,5 +57,13 @@ export class DeviceController {
   @Post()
   createDevice(@Body() device) {
     return this.deviceService.create(device);
+  }
+
+  @Post(':deviceId/capability')
+  addCapability(
+    @Param('deviceId') deviceId: string,
+    @Body() capability: AddCapabilityDto,
+  ) {
+    return this.deviceService.addCapability(deviceId, capability);
   }
 }

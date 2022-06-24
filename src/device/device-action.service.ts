@@ -36,8 +36,12 @@ export class DeviceActionService {
 
     for (const capability of device.capabilities) {
       if (capability.type === Capability.OnOff) {
+        const config = device.config.find(
+          (cap) => cap.__type === capability.type,
+        );
+
         await this.makeGetRequest(
-          device.config[capability.type][`${capability.state.value}`],
+          capability.state.value ? config.on : config.off || config.on,
         );
       }
     }
